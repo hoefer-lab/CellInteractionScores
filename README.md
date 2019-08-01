@@ -17,9 +17,14 @@ We propose to use z-scores to identify interactions which are specific to certai
 We first used this method to predict potential interactions between hematopoietic progenitors and the bone marrow niche in mice, the paper is now in press in the journal Blood.
 
 
-Please do not hesitate to contact me if you have any questions regarding the method.
+Please do not hesitate to contact me if you have any questions regarding the method, the script could surely benefit from your comments.
 
 Cheers,
 
 
 Adrien 
+
+# Contact
+
+adrien.jolly@dkfz-heidelberg.de
+
