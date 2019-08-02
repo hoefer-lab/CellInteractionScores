@@ -8,7 +8,7 @@ The method considers each cell-cell interaction as a quantitative variable depen
 
 For each pairs of cells, and each interaction in our Receptor Ligand DataBase (or any other R-L database of your choice), the script ranks the receptors and ligands  and then normalizes the sum of these two ranks so as to get a score ranging from 0 to 1. 
 
-For datasets with multiple regulator cells (ligand providers) and/or regulated cells(receptors), interactomes generated with our method can be compared between pairs of cells with standard tools of statistical learning (e.g., PCA, clustering) to extract cell-type-specific features.
+For datasets with multiple regulator cells (ligand providers) and/or regulated cells(receptors), cell-to-cellinteractomes generated with our method can be compared with each other with standard tools of statistical learning (e.g., PCA, clustering) to extract cell-type-specific features.
 In the script, we further propose to use z-scores to identify interactions which are specific to certain pairs of interactors. 
 
 We first used this method to predict potential interactions between hematopoietic progenitors and the bone marrow niche in mice, the paper is now in press in the journal Blood.
