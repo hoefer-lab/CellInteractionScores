@@ -1,4 +1,4 @@
-# InteractionScores
+# CellInteractionScores
 
 Dear reader,
 
