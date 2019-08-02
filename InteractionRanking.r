@@ -3,15 +3,13 @@
 
 
 #######
-# 'interactionmatrix' retrieves expression value of ligands and receptors in the interaction database in a
-
+# 'interactionmatrix' function below retrieves expression value of ligands and receptors in the interaction database from a count matrix
 
 #
 ####arguments###
 #-counts' is a count matrix with genes in row, if our interaction database is to be used, the rownames in the count matrix should be ENSEMBL mouse genes identifiers.
-#-interactions': the interaction database,
-#-datasheet: description of the samples in the count matrix, the rows of the datasheet must be ordered in the same way as the columns in the count matrix. the first column should contains  sample names, the second column should specify at what "cell_type" or "condition" belongs the sample
-# The third column must indicate either "receptor" or "ligd", this determines whether receptors or ligands expression values are extracted from the count matrix for a given sample,
+#-interactions': the interaction database
+#-datasheet: description of the samples in the count matrix, the rows of the datasheet must be ordered in the same way as the columns in the count matrix. the first column should contains  sample names, the second column should specify at what cell_type or condition belongs the sample, the script generates interactomes for pairs of cell populations. The third column must indicate either "receptor" or "ligd", this determines whether receptors or ligands expression values are extracted from the count matrix for a given sample.
 
 interactionmatrix=function(counts,interactions,datasheet)
 {
@@ -37,10 +35,13 @@ interactionmatrix=function(counts,interactions,datasheet)
 
 
 
-####### interactionranking generates sets of interactionscores for pairs of cells
+#######
+#'interactionranking' generates sets of Interaction Scores for pairs of interacting cells
 
-#you will need to install the library dplyr for dense ranking. The ranking is based, for each cell population, on the mean expression values of the receptors or ligands.
-#The function takes as argument a datasheet (same as the one from 'interactionmatrix', and the result of the 'interactionmatrix' function)
+#you will need to install the library dplyr for dense ranking. The ranking is based, for each cell population (the datasheet determines to what cell type belongs a sample), on the mean expression values of the receptors or ligands.
+#### arguments###
+#datasheet (same as the one from 'interactionmatrix')
+# interactionmatrix is the result of the 'interactionmatrix' function
 
 interactionranking=function(datasheet,interactionmatrix)
 {
@@ -55,6 +56,7 @@ interactionranking=function(datasheet,interactionmatrix)
     rankRecs=matrix(ncol=length(unique(datasheetlgd[,2]))*length(unique(datasheetreceptor[,2])),nrow=nrow(interactionmatrix))
     
     
+    #we now compute the ranks of receptors and ligands and then sum these ranks
     for(i in 1:length(unique(datasheetlgd[,2])))
     {
         for (j in 1:length(unique(datasheetreceptor[,2])))
@@ -88,16 +90,22 @@ interactionranking=function(datasheet,interactionmatrix)
 
 ##################################################
 
-#### the functions below can be used to look at the specificity of the interactions. Here I try to reply to the following question: for a given pair of interacting cells and a given interaction how high is the Interactionscore compared to interactionscores of other pairs of cells
+#### the functions below can be used to look at the specificity of the interactions. Here I try to reply to the following question: for a given pair of interacting cells and a given interaction how high is the Interactionscore compared to interactionscores of other pairs of cells####
 
-
-###  the function 'norm' converts values into z-scores, it is used in the next function 'divergent'
+#####
+#  the function 'norm' converts values into z-scores, it is used in the next function 'divergent'
 norm=function(values)
 {
     normal=((values-mean(values))/sd(values))
 }
 
-### takes as argument  selected sets of Interaction Scores (interactomes obtained with the "interactionranking" function) that the users want to compare to each other and then for each interaction in the DB, computes the z-scores for every pairs of cells. It returns a list of matrices (one per pair of cells) containing interaction scores and z-scores
+#####
+# for each interaction in the DB, 'divergent' computes the z-scores for every pairs of cells. It returns a list of matrices (one per pair of cells) containing Interaction Scores and z-scores
+
+####Arguments:###
+#- interactions is the the RL interaction database
+# - Scores contains selected sets of Interaction Scores (interactomes obtained with the "interactionranking" function)
+
 
 divergent=function(interactions,Scores)
 {
