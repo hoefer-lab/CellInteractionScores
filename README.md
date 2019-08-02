@@ -25,5 +25,5 @@ Adrien
 
 # Contact
 
-adrien.jolly@dkfz-heidelberg.de
+a.jolly@dkfz-heidelberg.de
 
