@@ -2,7 +2,6 @@
 
 Dear reader,
 
-I am glad you're here.
 
 Here's a simple procedure that we developped to predict pairwise cell-to-cell interactions from  bulk gene expression data.
 
