@@ -9,29 +9,31 @@
 ####arguments###
 #-counts' is a count matrix with genes in row, if our interaction database is to be used, the rownames in the count matrix should be ENSEMBL mouse genes identifiers.
 #-interactions': the interaction database
-#-datasheet: description of the samples in the count matrix, the rows of the datasheet must be ordered in the same way as the columns in the count matrix. the first column should contains  sample names, the second column should specify at what cell_type or condition belongs the sample, the script generates interactomes for pairs of cell populations. The third column must indicate either "receptor" or "ligd", this determines whether receptors or ligands expression values are extracted from the count matrix for a given sample.
+#-datasheet: description of the samples in the count matrix, the rows of the datasheet must be ordered in the same way as the columns in the count matrix. the first column should contains  sample names, the second column should specify to what cell_type or condition belongs the sample, the script generates interactomes for pairs of cell populations. The third column must indicate either "receptor" or "ligd", this determines whether receptors or ligands expression values are extracted from the count matrix for a given sample.
 
 interactionmatrix=function(counts,interactions,datasheet)
 {
     interactionmatPlus=matrix(ncol=ncol(counts),nrow=nrow(interactions))
-    
+    interactionmatPlus=data.frame(interactionmatPlus)
     
     for (i in 1:length(interactions[,1]))
-    if (interactions[i,2]%in%rownames(counts)&&interactions[i,1]%in%rownames(counts))#we exclude genes which are not in the the count matrix
     {
+        
+        if (interactions[i,2]%in%rownames(counts)&&interactions[i,1]%in%rownames(counts))#we exclude genes which are not in the the count matrix
         {
             interactionmatPlus[i,datasheet[,3]%in%"ligd"]=counts[rownames(counts)==interactions[i,2],datasheet[,3]%in%"ligd"]
             interactionmatPlus[i,datasheet[,3]%in%"receptor"]=counts[rownames(counts)==interactions[i,1],datasheet[,3]%in%"receptor"]
         }
+        else
+        {
+            interactionmatPlus[i,]=rep(NA,ncol(interactionmatPlus))
+        }
     }
-    else
-    {
-    interactionmatPlus[i,]=rep(NA,ncol(interactionmatPlus))
-    }
-    
     interactionmatPlus[interactionmatPlus<0]=0 # if there are negative values in the count matrix(can happen with log normalization for instance, they will be counted as 0)
     return(interactionmatPlus)
 }
+
+
 
 
 
@@ -104,7 +106,7 @@ norm=function(values)
 
 ####Arguments:###
 #- interactions is the the RL interaction database
-# - Scores contains selected sets of Interaction Scores (interactomes obtained with the "interactionranking" function)
+# - Scores contains selected sets of Interaction Scores (first of the 3 matrices produced by the the "interactionranking" function),
 
 
 divergent=function(interactions,Scores)
