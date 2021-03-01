@@ -111,7 +111,7 @@ norm=function(values)
 
 divergent=function(interactions,Scores)
 {
-    normScores=apply(Scores,1,norm)
+    normScores=apply(Scores[,1:ncol(Scores)-1],1,norm)
     colnames(normScores)=1:(nrow(Scores))
 
     informativeResult=list()
@@ -121,9 +121,12 @@ divergent=function(interactions,Scores)
         
         SortedScores2=interactions[as.numeric(names(SortedScores)),]
         informativeResult[[i]]=cbind(SortedScores2,Scores[SortedScores2[,5],i],SortedScores)
+        colnames(informativeResult[[i]])[c(5:7)]=c("Interaction.ID","InteractionScore","Z-score")
+        informativeResult[[i]][,c(6:7)]=round(informativeResult[[i]][,c(6:7)],digits=3)
     }
     return(informativeResult)
 }
+
 
 
 
